@@ -213,6 +213,7 @@ public class DocHeader {
                 "mm,top=" + marginTopBot + "mm,bottom=" + marginTopBot + "mm\"\n" +
                 "documentclass: extarticle\n" +
                 FONT_CONFIG + ": " + fontFamily + "\n" +
+                getFontOptions(fontFamily) +
                 "CJKmainfont: Noto Serif CJK SC\n" +
                 "fontsize: " + fontSize + "pt\n" +
                 "colorlinks: " + linkColor + "\n" +
@@ -224,6 +225,31 @@ public class DocHeader {
                 "    - \\newfontfamily{\\bengalifont}{Noto Sans Bengali}" +
                 HEADER_END;
         // "    - \\newfontfamily{\\symbolfont}{Noto Sans Symbols}\n" +
+    }
+
+    private static String getFontOptions(String fontFamily) {
+        String fontBase = fontFamily.substring(0, fontFamily.indexOf('.'));
+
+        switch (fontBase) {
+            // italic
+            case "DejaVuSerif": {
+                return  "mainfontoptions:\n" +
+                        "- BoldFont=" + fontBase + "-Bold.ttf" + " \n" +
+                        "- ItalicFont=" + fontBase + "-Italic.ttf" + "\n" +
+                        "- BoldItalicFont=" + fontBase + "-BoldItalic.ttf" + "\n";
+            }
+
+            // oblique
+            case "DejaVuSansMono":
+            case "DejaVuSans": {
+                return  "mainfontoptions:\n" +
+                        "- BoldFont=" + fontBase + "-Bold.ttf" + " \n" +
+                        "- ItalicFont=" + fontBase + "-Oblique.ttf" + "\n" +
+                        "- BoldItalicFont=" + fontBase + "-BoldOblique.ttf" + "\n";
+            }
+            default:
+                return "";
+        }
     }
 
     public static Map<String, String> fontFamilyMap() {

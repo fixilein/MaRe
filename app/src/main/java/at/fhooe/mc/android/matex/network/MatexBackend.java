@@ -11,7 +11,7 @@ import retrofit2.http.Path;
 
 public interface MatexBackend {
 
-    String SERVER = "http://troebinger.xyz:8088";
+    String SERVER = "https://troebinger.xyz/api/matex/";
     // String SERVER = "http://192.168.0.100:8099";
 
     @GET("upload/new")

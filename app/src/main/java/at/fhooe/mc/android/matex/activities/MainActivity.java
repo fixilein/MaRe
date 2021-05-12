@@ -30,7 +30,7 @@ import at.fhooe.mc.android.matex.document.DocumentAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String DONATE_URL = "https://www.buymeacoffee.com/felixtroebinger";
+    public static String DONATE_URL = "https://www.buymeacoffee.com/felixtroebinger";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

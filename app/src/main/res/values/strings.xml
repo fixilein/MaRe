@@ -56,4 +56,9 @@
     <string name="menu_main_donate">Buy me a beer</string>
     <string name="this_ad_helps_support_matex">This ad helps support MaTeX.</string>
     <string name="ad_clicked_thank_you">Thank you!</string>
+    <string name="version">Version:</string>
+    <string name="watch_ad">Watch Ad</string>
+    <string name="buy_me_a_beer">Buy Me a Beer</string>
+    <string name="want_to_support_matex">Want to support MaTeX?</string>
+    <string name="about_matex">About MaTeX</string>
 </resources>

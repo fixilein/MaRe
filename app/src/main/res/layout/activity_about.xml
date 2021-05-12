@@ -5,10 +5,53 @@
     android:layout_height="match_parent"
     tools:context=".activities.AboutActivity">
 
-    <WebView
-        android:id="@+id/activity_about_web_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/want_to_support_matex"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonWatchAd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/watch_ad" />
+
+            <Button
+                android:id="@+id/buttonBuyMeABeer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buy_me_a_beer" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textViewVersionNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/version"
+            android:textAlignment="viewEnd" />
+
+        <WebView
+            android:id="@+id/activity_about_web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

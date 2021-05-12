@@ -11,11 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.AboutActivity"></activity>
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="@string/about_matex"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.EditorActivity"
             android:label="@string/title_activity_editor"
-            android:parentActivityName=".activities.MainActivity"></activity>
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
@@ -40,7 +43,7 @@
         <!-- Ad Mob -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8038269995942724~4944001389"/>
+            android:value="ca-app-pub-8038269995942724~4944001389" />
 
     </application>
 

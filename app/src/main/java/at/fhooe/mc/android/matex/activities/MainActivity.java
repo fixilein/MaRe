@@ -13,6 +13,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.BufferedReader;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         createFAB();
         createWelcomeDocumentOnFirstStart();
         //closeKeyboard();
+
+        // TODO "Obtain consent from users in the European Economic Area (EEA)" ?
+        MobileAds.initialize(this);
     }
 
     private void createWelcomeDocumentOnFirstStart() {

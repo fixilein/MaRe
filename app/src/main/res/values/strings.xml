@@ -54,4 +54,6 @@
     <string name="about">About</string>
     <string name="error_context">Error generating pdf. Try again later.</string>
     <string name="menu_main_donate">Buy me a beer</string>
+    <string name="this_ad_helps_support_matex">This ad helps support MaTeX.</string>
+    <string name="ad_clicked_thank_you">Thank you!</string>
 </resources>

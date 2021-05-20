@@ -1,6 +1,8 @@
 package at.fhooe.mc.android.matex.ui.pdfpreview;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,11 +65,10 @@ public class PDFPreviewFragment extends Fragment {
     private AdView CreateAdView() {
         TextView adText = mView.findViewById(R.id.adText);
         mAdView = new AdView(Objects.requireNonNull(getContext()));
-        mAdView.setAdSize(AdSize.BANNER);
-        if (BuildConfig.DEBUG)
-            mAdView.setAdUnitId(AD_TEST_ID);
-        else
-            mAdView.setAdUnitId(AD_BANNER_UNIT_ID);
+        mAdView.setAdSize(AdSize.LARGE_BANNER);
+
+        boolean testAd = getTestAdPref();
+        mAdView.setAdUnitId(BuildConfig.DEBUG || testAd ? AD_TEST_ID : AD_BANNER_UNIT_ID);
 
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.setAdListener(new AdListener() {
@@ -81,6 +82,16 @@ public class PDFPreviewFragment extends Fragment {
         return mAdView;
     }
 
+    private boolean getTestAdPref() {
+        Context activity = getActivity();
+        if (activity == null) return false;
+
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        return sharedPref.getBoolean(getString(R.string.preference_test_ad), false);
+    }
+
     public void setError(final String error) {
         getActivity().runOnUiThread(
                 () -> new AlertDialog.Builder(PDFPreviewFragment.this.getActivity()).
@@ -90,7 +101,6 @@ public class PDFPreviewFragment extends Fragment {
                         .create().show()
         );
     }
-
 
     public void loadPdf(File pdf) {
         setLoading(false);

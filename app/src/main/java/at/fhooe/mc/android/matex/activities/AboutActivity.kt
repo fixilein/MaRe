@@ -1,5 +1,6 @@
 package at.fhooe.mc.android.matex.activities
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.Log
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import at.fhooe.mc.android.matex.BuildConfig
 import at.fhooe.mc.android.matex.R
@@ -19,6 +21,7 @@ class AboutActivity : AppCompatActivity() {
 
     private var mRewardedAd: RewardedAd? = null
     private var adButton: Button? = null
+    private var tapCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,14 @@ class AboutActivity : AppCompatActivity() {
         val versionLabel = findViewById<TextView>(R.id.textViewVersionNumber)
         val versionText = "${getString(R.string.version)}${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         versionLabel.text = versionText
+
+        versionLabel.setOnClickListener {
+            tapCount++
+            if (tapCount > 9) {
+                tapCount = 0
+                toggleTestAd()
+            }
+        }
 
         val beerButton = findViewById<Button>(R.id.buttonBuyMeABeer)
         beerButton.setOnClickListener {
@@ -44,10 +55,35 @@ class AboutActivity : AppCompatActivity() {
         }
     }
 
+    private fun toggleTestAd() {
+        val sharedPref = applicationContext?.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return
+
+        var testAd = sharedPref.getBoolean(getString(R.string.preference_test_ad), false)
+
+        with(sharedPref.edit()) {
+            putBoolean(getString(R.string.preference_test_ad), !testAd)
+            apply()
+        }
+
+        testAd = sharedPref.getBoolean(getString(R.string.preference_test_ad), false)
+
+        val message = if (testAd) "Now using test ads." else "Using real ads."
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getTestAdPref(): Boolean {
+        val sharedPref = applicationContext?.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return false
+
+        return sharedPref.getBoolean(getString(R.string.preference_test_ad), false)
+    }
+
     private fun loadAd() {
         val adRequest = AdRequest.Builder().build()
+        val prefTestAd = getTestAdPref()
 
-        val id = if (BuildConfig.DEBUG) AD_TEST_ID else AD_REWARD_UNIT_ID
+        val id = if (BuildConfig.DEBUG || prefTestAd) AD_TEST_ID else AD_REWARD_UNIT_ID
 
         RewardedAd.load(this, id, adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {

@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_border_horizontal_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_border_vertical_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_cal_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_bold_black.xml" value="0.1" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_code_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_insert_function_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_insert_image_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_insert_link_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_italic_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_list_bulleted_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_list_numbered_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_quote_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable-night/ic_format_strikethrough_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_border_horizontal_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_border_vertical_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_cal_black.xml" value="0.1" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_edit_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_bold_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_code_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_insert_function_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_insert_image_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_insert_link_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_italic_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_list_bulleted_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_list_numbered_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_quote_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_format_strikethrough_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_pdf_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_save_black.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_save_white.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/drawable/ic_share_white.xml" value="0.13" />
+        <entry key="..\:/Users/Felix/Projects/MaTeX/MaTeX-Android/app/src/main/res/layout/fragment_editor.xml" value="0.19814814814814816" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="org.jetbrains.annotations.Nullable" />
     <option name="myDefaultNotNull" value="androidx.annotation.RecentlyNonNull" />

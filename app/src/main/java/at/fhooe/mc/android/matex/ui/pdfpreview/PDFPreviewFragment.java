@@ -1,8 +1,6 @@
 package at.fhooe.mc.android.matex.ui.pdfpreview;
 
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +23,7 @@ import java.util.Objects;
 import at.fhooe.mc.android.matex.BuildConfig;
 import at.fhooe.mc.android.matex.R;
 import at.fhooe.mc.android.matex.activities.EditorActivity;
+import at.fhooe.mc.android.matex.network.Ads;
 import at.fhooe.mc.android.matex.network.RetrofitGetPdfTask;
 
 public class PDFPreviewFragment extends Fragment {
@@ -32,9 +31,6 @@ public class PDFPreviewFragment extends Fragment {
     public PDFView mPDFView;
     public View mView;
     private AdView mAdView;
-
-    private static final String AD_TEST_ID = "ca-app-pub-3940256099942544/6300978111";
-    private static final String AD_BANNER_UNIT_ID = "ca-app-pub-8038269995942724/7469543635";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_pdf_preview, container, false);
@@ -67,8 +63,8 @@ public class PDFPreviewFragment extends Fragment {
         mAdView = new AdView(Objects.requireNonNull(getContext()));
         mAdView.setAdSize(AdSize.LARGE_BANNER);
 
-        boolean testAd = getTestAdPref();
-        mAdView.setAdUnitId(BuildConfig.DEBUG || testAd ? AD_TEST_ID : AD_BANNER_UNIT_ID);
+        boolean testAd = Ads.getTestAdPref(getContext());
+        mAdView.setAdUnitId(BuildConfig.DEBUG || testAd ? Ads.BANNER_TEST_ID : Ads.BANNER_UNIT_ID);
 
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.setAdListener(new AdListener() {
@@ -80,16 +76,6 @@ public class PDFPreviewFragment extends Fragment {
         });
         mAdView.loadAd(adRequest);
         return mAdView;
-    }
-
-    private boolean getTestAdPref() {
-        Context activity = getActivity();
-        if (activity == null) return false;
-
-        SharedPreferences sharedPref = activity.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-        return sharedPref.getBoolean(getString(R.string.preference_test_ad), false);
     }
 
     public void setError(final String error) {

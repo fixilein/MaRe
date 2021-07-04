@@ -1,6 +1,5 @@
 package at.fhooe.mc.android.matex.activities
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,10 +7,10 @@ import android.util.Log
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import at.fhooe.mc.android.matex.BuildConfig
 import at.fhooe.mc.android.matex.R
+import at.fhooe.mc.android.matex.network.Ads
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -38,7 +37,7 @@ class AboutActivity : AppCompatActivity() {
             tapCount++
             if (tapCount > 9) {
                 tapCount = 0
-                toggleTestAd()
+                Ads.toggleTestAd(applicationContext)
             }
         }
 
@@ -55,35 +54,13 @@ class AboutActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleTestAd() {
-        val sharedPref = applicationContext?.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return
 
-        var testAd = sharedPref.getBoolean(getString(R.string.preference_test_ad), false)
-
-        with(sharedPref.edit()) {
-            putBoolean(getString(R.string.preference_test_ad), !testAd)
-            apply()
-        }
-
-        testAd = sharedPref.getBoolean(getString(R.string.preference_test_ad), false)
-
-        val message = if (testAd) "Now using test ads." else "Using real ads."
-        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun getTestAdPref(): Boolean {
-        val sharedPref = applicationContext?.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return false
-
-        return sharedPref.getBoolean(getString(R.string.preference_test_ad), false)
-    }
 
     private fun loadAd() {
         val adRequest = AdRequest.Builder().build()
-        val prefTestAd = getTestAdPref()
+        val prefTestAd = Ads.getTestAdPref(applicationContext)
 
-        val id = if (BuildConfig.DEBUG || prefTestAd) AD_TEST_ID else AD_REWARD_UNIT_ID
+        val id = if (BuildConfig.DEBUG || prefTestAd) Ads.AD_REWARD_TEST_ID else Ads.AD_REWARD_UNIT_ID
 
         RewardedAd.load(this, id, adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -129,14 +106,14 @@ class AboutActivity : AppCompatActivity() {
                 fun onUserEarnedReward(rewardItem: RewardItem) {
                     val rewardAmount = rewardItem.amount
                     val rewardType = rewardItem.type
-                    Log.d(Companion.TAG, "User earned the reward. Amount: $rewardAmount Type: $rewardType")
+                    Log.d(TAG, "User earned the reward. Amount: $rewardAmount Type: $rewardType")
 
                     adButton?.isEnabled = false
                     loadAd()
                 }
             }
         } else {
-            Log.d(Companion.TAG, "The rewarded ad wasn't ready yet.")
+            Log.d(TAG, "The rewarded ad wasn't ready yet.")
             adButton?.isEnabled = false
             loadAd()
         }
@@ -144,8 +121,5 @@ class AboutActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "AboutActivity"
-
-        private const val AD_REWARD_UNIT_ID = "ca-app-pub-8038269995942724/8574510232"
-        private const val AD_TEST_ID = "ca-app-pub-3940256099942544/5224354917"
     }
 }

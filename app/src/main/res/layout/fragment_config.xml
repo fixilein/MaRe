@@ -152,7 +152,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:drawableStart="@drawable/ic_cal_black"
+                            android:drawableStart="@drawable/ic_cal"
                             android:text="@string/pick_date" />
 
                     </LinearLayout>
@@ -262,7 +262,7 @@
                             android:id="@+id/imageView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_border_vertical_black" />
+                            app:srcCompat="@drawable/ic_border_vertical" />
 
                         <SeekBar
                             android:id="@+id/fragment_config_seekbar_margin_vert"
@@ -289,7 +289,7 @@
                             android:id="@+id/imageView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_border_horizontal_black" />
+                            app:srcCompat="@drawable/ic_border_horizontal" />
 
                         <SeekBar
                             android:id="@+id/fragment_config_seekbar_margin_hor"

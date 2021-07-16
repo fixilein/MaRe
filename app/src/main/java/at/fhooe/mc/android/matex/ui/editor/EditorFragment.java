@@ -2,9 +2,12 @@ package at.fhooe.mc.android.matex.ui.editor;
 
 import android.app.AlertDialog;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,18 +37,18 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class EditorFragment extends Fragment implements View.OnClickListener {
 
-    private Document mDocument;
-    private MarkdownEditText mMDEditText;
-    MarkdownProcessor mMarkdownProcessor;
+    private Document document;
+    private MarkdownEditText mdEditText;
+    MarkdownProcessor markdownProcessor;
     private View mView;
 
     public View onCreateView(@NonNull LayoutInflater _inflater, ViewGroup _container, Bundle _savedInstanceState) {
         View root = _inflater.inflate(R.layout.fragment_editor, _container, false);
         setHasOptionsMenu(true);
         mView = root;
-        mDocument = EditorActivity.mDocument;
-        mMDEditText = mView.findViewById(R.id.fragment_editor_editText_editor);
-        mMDEditText.setText(mDocument.getContent());
+        document = EditorActivity.mDocument;
+        mdEditText = mView.findViewById(R.id.fragment_editor_editText_editor);
+        mdEditText.setText(document.getContent());
 
         initMarkdownProcessor();
 
@@ -57,8 +60,6 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     private void assignButtonListeners(View _view) {
@@ -81,8 +82,48 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         saveFile();
-        mDocument.deleteUnusedImages(getContext());
+        document.deleteUnusedImages(getContext());
+
+        savePosition();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        restorePosition();
+    }
+
+    private void savePosition() {
+        int start = mdEditText.getSelectionStart();
+        int end = mdEditText.getSelectionEnd();
+
+        SharedPreferences.Editor edit = getPreferences().edit();
+        edit.putInt(SELECTION_START_PREFIX + document.getTitle(), start);
+        edit.putInt(SELECTION_END_PREFIX + document.getTitle(), end);
+        edit.apply();
+    }
+
+    private void restorePosition() {
+        SharedPreferences prefs = getPreferences();
+        int start = prefs.getInt(SELECTION_START_PREFIX + document.getTitle(), 0);
+        int end = prefs.getInt(SELECTION_END_PREFIX + document.getTitle(), 0);
+
+        if (start != 0 || end != 0) {
+            try {
+                mdEditText.setSelection(start, end);
+                mdEditText.requestFocus();
+            } catch (Exception e) {
+                Log.e("EditorFragment", e.toString());
+            }
+        }
+    }
+
+    private SharedPreferences getPreferences() {
+        return getContext().getSharedPreferences(getContext().getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+    }
+
+    private static final String SELECTION_START_PREFIX = "SELECTION_START_";
+    private static final String SELECTION_END_PREFIX = "SELECTION_END_";
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -100,45 +141,45 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveFile() {
-        if (mDocument != null && mDocument.getFile().exists() && // file hasn't been deleted
-                !mDocument.getContent().equals(mMDEditText.getText().toString())) // file has been changed
-            mDocument.saveFile(mDocument.getHeader().toString(), mMDEditText.getText().toString());
+        if (document != null && document.getFile().exists() && // file hasn't been deleted
+                !document.getContent().equals(mdEditText.getText().toString())) // file has been changed
+            document.saveFile(document.getHeader().toString(), mdEditText.getText().toString());
     }
 
     @Override
     public void onClick(View v) {
 
-        int selStart = mMDEditText.getSelectionStart();
-        int selEnd = mMDEditText.getSelectionEnd();
-        Editable editable = mMDEditText.getText();
+        int selStart = mdEditText.getSelectionStart();
+        int selEnd = mdEditText.getSelectionEnd();
+        Editable editable = mdEditText.getText();
 
         switch (v.getId()) {
             case R.id.fragment_editor_button_bold: {
-                inlineMarkdownFormat(mMDEditText, selStart, selEnd, "**");
+                inlineMarkdownFormat(mdEditText, selStart, selEnd, "**");
                 break;
             }
             case R.id.fragment_editor_button_italic: {
-                inlineMarkdownFormat(mMDEditText, selStart, selEnd, "*");
+                inlineMarkdownFormat(mdEditText, selStart, selEnd, "*");
                 break;
             }
             case R.id.fragment_editor_button_strikethrough: {
-                inlineMarkdownFormat(mMDEditText, selStart, selEnd, "~~");
+                inlineMarkdownFormat(mdEditText, selStart, selEnd, "~~");
                 break;
             }
             case R.id.fragment_editor_button_heading_add: {
-                changeHeading(mMDEditText, selStart, selEnd, true);
+                changeHeading(mdEditText, selStart, selEnd, true);
                 break;
             }
             case R.id.fragment_editor_button_heading_sub: {
-                changeHeading(mMDEditText, selStart, selEnd, false);
+                changeHeading(mdEditText, selStart, selEnd, false);
                 break;
             }
             case R.id.fragment_editor_button_ordered_list: {
-                prefixMarkdownFormat(mMDEditText, selStart, selEnd, "1. ");
+                prefixMarkdownFormat(mdEditText, selStart, selEnd, "1. ");
                 break;
             }
             case R.id.fragment_editor_button_unordered_list: {
-                prefixMarkdownFormat(mMDEditText, selStart, selEnd, "- ");
+                prefixMarkdownFormat(mdEditText, selStart, selEnd, "- ");
                 break;
             }
             case R.id.fragment_editor_button_horizontal_line: {
@@ -146,7 +187,7 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.fragment_editor_button_function: {
-                inlineMarkdownFormat(mMDEditText, selStart, selEnd, "\n$$\n");
+                inlineMarkdownFormat(mdEditText, selStart, selEnd, "\n$$\n");
                 break;
             }
             case R.id.fragment_editor_button_link: {
@@ -158,11 +199,11 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.fragment_editor_button_quote: {
-                prefixMarkdownFormat(mMDEditText, selStart, selEnd, "> ");
+                prefixMarkdownFormat(mdEditText, selStart, selEnd, "> ");
                 break;
             }
             case R.id.fragment_editor_button_code: {
-                inlineMarkdownFormat(mMDEditText, selStart, selEnd, "\n```\n");
+                inlineMarkdownFormat(mdEditText, selStart, selEnd, "\n```\n");
                 break;
             }
             default: {
@@ -174,23 +215,23 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initMarkdownProcessor() {
-        mMarkdownProcessor = new MarkdownProcessor(getContext());
+        markdownProcessor = new MarkdownProcessor(getContext());
         MarkdownConfiguration markdownConfiguration = new MarkdownConfiguration.Builder(getContext())
                 .setBlockQuotesLineColor(0) // no quotes
                 .build();
-        mMarkdownProcessor.config(markdownConfiguration);
-        mMarkdownProcessor.factory(EditFactory.create());
-        mMDEditText.clear();
-        mMarkdownProcessor.live(mMDEditText);
+        markdownProcessor.config(markdownConfiguration);
+        markdownProcessor.factory(EditFactory.create());
+        mdEditText.clear();
+        markdownProcessor.live(mdEditText);
     }
 
     private void refreshMarkdownProcessor() {
-        mMDEditText.clear();
-        mMarkdownProcessor.live(mMDEditText);
+        mdEditText.clear();
+        markdownProcessor.live(mdEditText);
     }
 
     private void insertLink() {
-        int selStart = mMDEditText.getSelectionStart();
+        int selStart = mdEditText.getSelectionStart();
         ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
         if (clipboardManager.getPrimaryClip() != null) {
             String clipboard = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
@@ -211,8 +252,8 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     }
 
     private void insertLinkText(String url, int selStart) {
-        mMDEditText.getText().insert(selStart, "\n[text](" + url + ")\n");
-        mMDEditText.setSelection(selStart + 2, selStart + 6);
+        mdEditText.getText().insert(selStart, "\n[text](" + url + ")\n");
+        mdEditText.setSelection(selStart + 2, selStart + 6);
     }
 
 
@@ -226,9 +267,9 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     private static final int PICK_IMAGE = 1764;
 
     public void insertImageLink(String name) {
-        int selStart = mMDEditText.getSelectionStart();
-        mMDEditText.getText().insert(selStart, "\n![desc](" + name + ")\n");
-        mMDEditText.setSelection(selStart + 3, selStart + 7);
+        int selStart = mdEditText.getSelectionStart();
+        mdEditText.getText().insert(selStart, "\n![desc](" + name + ")\n");
+        mdEditText.setSelection(selStart + 3, selStart + 7);
     }
 
     @Override
@@ -237,7 +278,7 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
         if (requestCode == PICK_IMAGE && data != null) {
 
             ImportImageDialog dialog = new ImportImageDialog()
-                    .setDocument(mDocument)
+                    .setDocument(document)
                     .setFragment(this)
                     .setIntentData(data);
             dialog.show(getFragmentManager(), "image_dialog");
@@ -334,5 +375,4 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
         editText.setSelection(newSelection);
 
     }
-
 }

@@ -8,6 +8,8 @@ import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import at.fhooe.mc.android.matex.BuildConfig
 import at.fhooe.mc.android.matex.R
 import at.fhooe.mc.android.matex.network.Ads
@@ -28,6 +30,10 @@ class AboutActivity : AppCompatActivity() {
 
         val webView = findViewById<WebView>(R.id.activity_about_web_view)
         webView.loadUrl("file:///android_asset/licenses.html")
+
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            WebSettingsCompat.setForceDark(webView.settings, WebSettingsCompat.FORCE_DARK_ON)
+        }
 
         val versionLabel = findViewById<TextView>(R.id.textViewVersionNumber)
         val versionText = "${getString(R.string.version)}${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
@@ -53,7 +59,6 @@ class AboutActivity : AppCompatActivity() {
             showRewardAd()
         }
     }
-
 
 
     private fun loadAd() {

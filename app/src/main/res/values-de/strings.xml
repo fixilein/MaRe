@@ -54,5 +54,6 @@
     <string name="buy_me_a_beer">Kauf mir ein Bier</string>
     <string name="want_to_support_matex">Willst du MaTeX unterstützen?</string>
     <string name="about_matex">Über MaTeX</string>
+    <string name="created_by">Kreiert von Felix Tröbinger</string>
 
 </resources>

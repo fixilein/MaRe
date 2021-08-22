@@ -3,17 +3,18 @@ package at.fhooe.mc.android.matex.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
-import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.webkit.WebSettingsCompat
-import androidx.webkit.WebViewFeature
 import at.fhooe.mc.android.matex.BuildConfig
 import at.fhooe.mc.android.matex.R
 import at.fhooe.mc.android.matex.network.Ads
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
@@ -28,35 +29,43 @@ class AboutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
 
-        val webView = findViewById<WebView>(R.id.activity_about_web_view)
-        webView.loadUrl("file:///android_asset/licenses.html")
-
-        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-            WebSettingsCompat.setForceDark(webView.settings, WebSettingsCompat.FORCE_DARK_ON)
+        findViewById<TextView>(R.id.licences).apply {
+            text = Html.fromHtml(
+                getString(R.string.licenses_full_text),
+                Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST
+            )
         }
 
-        val versionLabel = findViewById<TextView>(R.id.textViewVersionNumber)
-        val versionText = "${getString(R.string.version)}${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-        versionLabel.text = versionText
-
-        versionLabel.setOnClickListener {
-            tapCount++
-            if (tapCount > 9) {
-                tapCount = 0
-                Ads.toggleTestAd(applicationContext)
+        findViewById<Button>(R.id.btn_apache_license).apply {
+            setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(APACHE_2_0_LINK)))
             }
         }
 
-        val beerButton = findViewById<Button>(R.id.buttonBuyMeABeer)
-        beerButton.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.DONATE_URL)))
+        val versionText =
+            "${getString(R.string.version)} ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+
+        findViewById<TextView>(R.id.textViewVersionNumber).apply {
+            text = versionText
+
+            setOnClickListener {
+                if (++tapCount > 9) {
+                    tapCount = 0
+                    Ads.toggleTestAd(applicationContext)
+                }
+            }
+        }
+
+        findViewById<Button>(R.id.buttonBuyMeABeer).apply {
+            setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.DONATE_URL)))
+            }
         }
 
         loadAd()
 
-        adButton = findViewById(R.id.buttonWatchAd)
-        adButton?.setOnClickListener {
-            showRewardAd()
+        adButton = findViewById<Button?>(R.id.buttonWatchAd).apply {
+            setOnClickListener { showRewardAd() }
         }
     }
 
@@ -65,7 +74,8 @@ class AboutActivity : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         val prefTestAd = Ads.getTestAdPref(applicationContext)
 
-        val id = if (BuildConfig.DEBUG || prefTestAd) Ads.AD_REWARD_TEST_ID else Ads.AD_REWARD_UNIT_ID
+        val id = if (BuildConfig.DEBUG || prefTestAd)
+            Ads.AD_REWARD_TEST_ID else Ads.AD_REWARD_UNIT_ID
 
         RewardedAd.load(this, id, adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -75,7 +85,7 @@ class AboutActivity : AppCompatActivity() {
             }
 
             override fun onAdLoaded(rewardedAd: RewardedAd) {
-                Log.d(Companion.TAG, "Ad was loaded.")
+                Log.d(TAG, "Ad was loaded.")
                 mRewardedAd = rewardedAd
                 adButton?.isEnabled = true
             }
@@ -126,5 +136,6 @@ class AboutActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "AboutActivity"
+        private const val APACHE_2_0_LINK = "https://www.apache.org/licenses/LICENSE-2.0"
     }
 }

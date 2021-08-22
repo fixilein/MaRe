@@ -62,7 +62,7 @@ public class RetrofitGetPdfTask extends AsyncTask<Void, Void, Void> {
             getPdf(id);
 
         } catch (IOException e) {
-            mPdfFragment.setError(mPdfFragment.getString(R.string.error_connection));
+            mPdfFragment.setError(context.getString(R.string.error_connection));
             e.printStackTrace();
         }
 

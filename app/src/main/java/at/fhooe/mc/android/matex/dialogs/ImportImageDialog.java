@@ -37,7 +37,7 @@ public class ImportImageDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_import_image, null);
 
-        final List<String> list = EditorActivity.mDocument.getImageNamesList(getContext());
+        final List<String> list = EditorActivity.Companion.getDocument().getImageNamesList(getContext());
         final EditText et = view.findViewById(R.id.dialog_image_import_editText_title);
 
         Context context;

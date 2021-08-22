@@ -66,4 +66,9 @@
     <string name="created_by">Created by Felix Tröbinger</string>
     <string name="licences">Licences</string>
     <string name="licenses_full_text" translatable="false"><![CDATA[<p>This app uses the following libraries licensed under the <em>Apache License 2.0</em>, which can be found below:</p> <ul>     <li><strong>RxMarkdown</strong> by yydcdut</li>     <li><strong>PrettyTime</strong> by OCPsoft</li>     <li><strong>Retrofit</strong> by Square</li>     <li><strong>AndroidPdfViewer</strong> by barteksc</li>     <li><strong>Zip4j</strong> by Srikanth Reddy Lingala</li> </ul>]]></string>
+    <string name="purchase_successful_message">Purchase successful. Thank you for your support.</string>
+    <string name="purchase_cancelled_message">Purchase was cancelled.</string>
+    <string name="preference_remove_ads" translatable="false">PREF_REMOVE_ADS</string>
+    <string name="remove_ads_text">Want to remove ads and support MaTeX?</string>
+    <string name="remove_ads_cta">Remove ads</string>
 </resources>

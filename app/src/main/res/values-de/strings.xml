@@ -56,5 +56,9 @@
     <string name="about_matex">Über MaTeX</string>
     <string name="created_by">Kreiert von Felix Tröbinger</string>
     <string name="licences">Lizenzen</string>
+    <string name="purchase_successful_message">Kauf erfolgreich. Vielen Dank für Deine Unterstützung.</string>
+    <string name="purchase_cancelled_message">Kauf wurde abgebrochen.</string>
+    <string name="remove_ads_text">Möchtest du Werbungen entfernen und MaTeX unterstützen?</string>
+    <string name="remove_ads_cta">Werbung enternen</string>
 
 </resources>

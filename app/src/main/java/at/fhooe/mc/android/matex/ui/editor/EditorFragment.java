@@ -1,5 +1,7 @@
 package at.fhooe.mc.android.matex.ui.editor;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
 import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -33,21 +35,17 @@ import at.fhooe.mc.android.matex.activities.EditorActivity;
 import at.fhooe.mc.android.matex.dialogs.ImportImageDialog;
 import at.fhooe.mc.android.matex.document.Document;
 
-import static android.content.Context.CLIPBOARD_SERVICE;
-
 public class EditorFragment extends Fragment implements View.OnClickListener {
 
     private Document document;
     private MarkdownEditText mdEditText;
     MarkdownProcessor markdownProcessor;
-    private View mView;
 
     public View onCreateView(@NonNull LayoutInflater _inflater, ViewGroup _container, Bundle _savedInstanceState) {
         View root = _inflater.inflate(R.layout.fragment_editor, _container, false);
         setHasOptionsMenu(true);
-        mView = root;
-        document = EditorActivity.mDocument;
-        mdEditText = mView.findViewById(R.id.fragment_editor_editText_editor);
+        document = EditorActivity.Companion.getDocument();
+        mdEditText = root.findViewById(R.id.fragment_editor_editText_editor);
         mdEditText.setText(document.getContent());
 
         initMarkdownProcessor();

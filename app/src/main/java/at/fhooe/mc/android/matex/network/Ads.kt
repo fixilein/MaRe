@@ -13,12 +13,16 @@ class Ads {
         const val BANNER_UNIT_ID = "ca-app-pub-8038269995942724/7469543635"
 
         fun toggleTestAd(context: Context) {
-            val sharedPref = getSharedPrefs(context) ?: return
+            val sharedPref = getSharedPrefs(context)
 
-            var testAd = sharedPref.getBoolean(context.getString(R.string.preference_test_ad), false)
+            var testAd =
+                sharedPref.getBoolean(context.getString(R.string.preference_test_ad), false)
 
             with(sharedPref.edit()) {
-                putBoolean(context.getString(at.fhooe.mc.android.matex.R.string.preference_test_ad), !testAd)
+                putBoolean(
+                    context.getString(at.fhooe.mc.android.matex.R.string.preference_test_ad),
+                    !testAd
+                )
                 apply()
             }
 
@@ -29,12 +33,15 @@ class Ads {
         }
 
         @JvmStatic
-        fun getTestAdPref(context: Context): Boolean {
-            val sharedPref = getSharedPrefs(context)
-                    ?: return false
+        fun getTestAdPref(context: Context): Boolean = getSharedPrefs(context).getBoolean(
+            context.getString(R.string.preference_test_ad),
+            false
+        )
 
-            return sharedPref.getBoolean(context.getString(R.string.preference_test_ad), false)
-        }
+        fun getHasRemoveAds(context: Context): Boolean = getSharedPrefs(context).getBoolean(
+            context.getString(R.string.preference_remove_ads),
+            false
+        )
 
         private fun getSharedPrefs(context: Context) = context.getSharedPreferences(
             context.getString(R.string.preference_file_key), Context.MODE_PRIVATE

@@ -3,6 +3,7 @@
     package="at.fhooe.mc.android.matex">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:icon="@mipmap/ic_launcher"

@@ -44,7 +44,7 @@ public class ConfigFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_config, container, false);
         setHasOptionsMenu(false);
 
-        mDocument = EditorActivity.mDocument;
+        mDocument = EditorActivity.Companion.getDocument();
         mHeader = mDocument.getHeader();
 
         cbToc = root.findViewById(R.id.fragment_config_checkBox_toc);

@@ -71,4 +71,6 @@
     <string name="preference_remove_ads" translatable="false">PREF_REMOVE_ADS</string>
     <string name="remove_ads_text">Want to remove ads and support MaTeX?</string>
     <string name="remove_ads_cta">Remove ads</string>
+    <string name="purchase_failed_message">Error purchasing item.</string>
+    <string name="error_generating_pdf">Error while generating PDF</string>
 </resources>

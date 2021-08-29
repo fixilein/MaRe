@@ -43,6 +43,18 @@ class Ads {
             false
         )
 
+        fun setHasRemoveAds(context: Context, value: Boolean) {
+            val sharedPref = getSharedPrefs(context)
+
+            with(sharedPref.edit()) {
+                putBoolean(
+                    context.getString(R.string.preference_remove_ads),
+                    value
+                )
+                apply()
+            }
+        }
+
         private fun getSharedPrefs(context: Context) = context.getSharedPreferences(
             context.getString(R.string.preference_file_key), Context.MODE_PRIVATE
         )

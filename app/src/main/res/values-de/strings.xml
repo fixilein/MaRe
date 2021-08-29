@@ -60,5 +60,7 @@
     <string name="purchase_cancelled_message">Kauf wurde abgebrochen.</string>
     <string name="remove_ads_text">Möchtest du Werbungen entfernen und MaTeX unterstützen?</string>
     <string name="remove_ads_cta">Werbung enternen</string>
+    <string name="purchase_failed_message">Fehler beim Kauf.</string>
+    <string name="error_generating_pdf">Fehler beim erstellen der PDF Datei.</string>
 
 </resources>

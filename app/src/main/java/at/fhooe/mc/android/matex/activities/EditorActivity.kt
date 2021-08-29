@@ -1,6 +1,5 @@
 package at.fhooe.mc.android.matex.activities
 
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +15,7 @@ import androidx.navigation.ui.NavigationUI
 import at.fhooe.mc.android.matex.MyFileProvider
 import at.fhooe.mc.android.matex.R
 import at.fhooe.mc.android.matex.document.Document
+import at.fhooe.mc.android.matex.network.Ads
 import at.fhooe.mc.android.matex.network.BillingSecrets
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
@@ -101,13 +101,13 @@ class EditorActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         AlertDialog.Builder(this@EditorActivity)
             .setTitle(String.format(applicationContext.getString(R.string.delete_question), title))
             .setMessage(applicationContext.getString(R.string.delete_question_long))
-            .setPositiveButton(android.R.string.ok) { dialog: DialogInterface?, which: Int ->
+            .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
                 document!!.deleteFiles(
                     applicationContext
                 )
                 finish() // close editor
             }
-            .setNegativeButton(android.R.string.no, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
 
@@ -124,33 +124,37 @@ class EditorActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         fileProvider.shareFile(file, mimeType)
     }
 
+    // TODO: move this to ViewModel
+    var isBillingInitialized = false
+
+    /**
+     * Called when BillingProcessor was initialized and it's ready to purchase
+     */
     override fun onBillingInitialized() {
-        /*
-        * Called when BillingProcessor was initialized and it's ready to purchase
-        */
+        isBillingInitialized = true
     }
 
+
+    /**
+     * Called when some error occurred. See Constants class for more details
+     *
+     * Note - this includes handling the case where the user canceled the buy dialog:
+     * errorCode = Constants.BILLING_RESPONSE_RESULT_USER_CANCELED
+     */
     override fun onBillingError(errorCode: Int, error: Throwable?) {
         Log.e(BILLING_TAG, "ErrorCode: $errorCode")
         Log.e(BILLING_TAG, error.toString())
 
         when (errorCode) {
-            BillingConstants.BILLING_RESPONSE_RESULT_USER_CANCELED -> {
-                Toast.makeText(
-                    this,
-                    getString(R.string.purchase_cancelled_message),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            BillingConstants.BILLING_RESPONSE_RESULT_USER_CANCELED -> showBillingErrorMessage(
+                getString(R.string.purchase_cancelled_message)
+            )
+            else -> showBillingErrorMessage(getString(R.string.purchase_failed_message))
         }
-
-        /*
-        * Called when some error occurred. See Constants class for more details
-        *
-        * Note - this includes handling the case where the user canceled the buy dialog:
-        * errorCode = Constants.BILLING_RESPONSE_RESULT_USER_CANCELED
-        */
     }
+
+    private fun showBillingErrorMessage(message: String) =
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     override fun onProductPurchased(productId: String, details: TransactionDetails?) {
         when (productId) {
@@ -159,11 +163,18 @@ class EditorActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         }
     }
 
+    /**
+     * Called when purchase history was restored and the list of all owned PRODUCT ID's
+     * was loaded from Google Play
+     */
     override fun onPurchaseHistoryRestored() {
-        /*
-        * Called when purchase history was restored and the list of all owned PRODUCT ID's
-        * was loaded from Google Play
-        */
+        if (billingProcessor.isPurchased(BillingSecrets.REMOVE_ADS_PRODUCT_ID)) {
+            onRemoveAdsPurchaseSuccessful()
+            Log.i(BILLING_TAG, "onPurchaseHistoryRestored: Remove Ads restored.")
+        } else {
+            Ads.setHasRemoveAds(context = this, value = false)
+            Log.i(BILLING_TAG, "onPurchaseHistoryRestored: No purchases.")
+        }
     }
 
     fun purchaseRemoveAds() {
@@ -177,14 +188,7 @@ class EditorActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
             Toast.LENGTH_SHORT
         ).show()
 
-        val sharedPref = getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE
-        )
-
-        with(sharedPref.edit()) {
-            putBoolean(getString(R.string.preference_test_ad), true)
-            apply()
-        }
+        Ads.setHasRemoveAds(context = this, value = true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

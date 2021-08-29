@@ -182,12 +182,11 @@ class EditorActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
     }
 
     private fun onRemoveAdsPurchaseSuccessful() {
-        Toast.makeText(
-            this,
-            getString(R.string.purchase_successful_message),
-            Toast.LENGTH_SHORT
-        ).show()
-
+        AlertDialog.Builder(this).apply {
+            setTitle(R.string.purchase_successful_title)
+            setMessage(R.string.purchase_successful_message)
+            show()
+        }
         Ads.setHasRemoveAds(context = this, value = true)
     }
 

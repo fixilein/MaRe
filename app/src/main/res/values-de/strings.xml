@@ -62,5 +62,6 @@
     <string name="remove_ads_cta">Werbung enternen</string>
     <string name="purchase_failed_message">Fehler beim Kauf.</string>
     <string name="error_generating_pdf">Fehler beim erstellen der PDF Datei.</string>
+    <string name="purchase_successful_title">Danke!</string>
 
 </resources>

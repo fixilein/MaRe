@@ -73,4 +73,5 @@
     <string name="remove_ads_cta">Remove ads</string>
     <string name="purchase_failed_message">Error purchasing item.</string>
     <string name="error_generating_pdf">Error while generating PDF</string>
+    <string name="purchase_successful_title">Thank You!</string>
 </resources>

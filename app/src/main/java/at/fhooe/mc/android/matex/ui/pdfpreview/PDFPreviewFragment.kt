@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import at.fhooe.mc.android.matex.BuildConfig
@@ -55,20 +57,19 @@ class PDFPreviewFragment : Fragment() {
     }
 
     private fun setLoading(loading: Boolean) {
-        val llLoading = rootView.findViewById<LinearLayout>(R.id.fragment_pdf_loading)
-        val llAd = rootView.findViewById<LinearLayout>(R.id.pdf_preview_banner_ad)
+        val llLoading = rootView.findViewById<LinearLayout>(R.id.fragment_pdf_loading_spinner)
+        val llBannerAd = rootView.findViewById<LinearLayout>(R.id.pdf_preview_banner_ad)
         val pdfView = rootView.findViewById<PDFView>(R.id.pdfView)
         when {
             loading -> {
                 llLoading.isVisible = true
-                llAd.isVisible = true
+                llBannerAd.isVisible = true
 
-                createAdView()
-                adView?.let { llAd.addView(it) }
+                createAdView { llBannerAd.addView(this) }
             }
             else -> {
                 llLoading.isVisible = false
-                llAd.isVisible = false
+                llBannerAd.isVisible = false
                 pdfView.isVisible = true
                 if (adView != null) {
                     adView!!.destroy()
@@ -81,11 +82,13 @@ class PDFPreviewFragment : Fragment() {
     /**
      * Creates and loads the banner ad if the user has not purchased ad-free.
      */
-    private fun createAdView() {
+    private fun createAdView(onFinished: AdView.() -> Unit) {
         // Don't load the ad when the user hs purchased ad-free.
-        if (Ads.getHasRemoveAds(requireContext())) return
+        // Debug builds always loads ads
+        if (Ads.getHasRemoveAds(requireContext()) && !BuildConfig.DEBUG)
+            return
 
-        val llAdText = rootView.findViewById<LinearLayout>(R.id.adText)
+        val purchaseCardView = rootView.findViewById<CardView>(R.id.adPurchaseCard)
 
         adView = AdView(Objects.requireNonNull(context)).apply {
             adSize = AdSize.LARGE_BANNER
@@ -96,10 +99,11 @@ class PDFPreviewFragment : Fragment() {
                 override fun onAdLoaded() {
                     super.onAdLoaded()
                     if ((activity as EditorActivity?)!!.isBillingInitialized)
-                        llAdText.visibility = View.VISIBLE
+                        purchaseCardView.isVisible = true
                 }
             }
             loadAd(adRequest)
+            onFinished()
         }
     }
 
